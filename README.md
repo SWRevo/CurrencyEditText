@@ -1,7 +1,7 @@
 # CurrencyEditText
 [![](https://jitpack.io/v/SWRevo/CurrencyEditText.svg)](https://jitpack.io/#SWRevo/CurrencyEditText)
 
-## Implementation in Android Studio
+## Implementation in Android Studio or Sketchware
 ## Gradle
 Add the following to your `build.gradle` to use:
 ```
@@ -10,51 +10,51 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.SWRevo:FloatSlideUpSheet:1.4.0'
-}
-```
-## Implementation in Sketchware
-Version 1.5.0 uses material component version 1.0.0 and appcompat 1.0.0 for support in Sketchware
-Add the following to your Sketchware `local_library` download use:
-```
-dependencies {
-    implementation 'com.github.SWRevo:FloatSlideUpSheet:1.5.0'
+    implementation 'com.github.SWRevo:CurrencyEditText:v1.1.0'
 }
 ```
 
 ## Usage
+
+```xml
+
+    <id.indosw.edittextmatauang.lib.CustomEditTextMataUang
+        android:id="@+id/etInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Input Amount"
+        android:inputType="number"
+        android:textSize="24sp"
+        tools:ignore="HardcodedText" />
+
+```
+
 ## KOTLIN
 
 ```java
 
-class FloatingSlideUpSheetActivity : AppCompatActivity() {
-
-    private var slideContent : FloatingSlideUpLayout? = null
-    private var containerFloatingMenu : LinearLayout? = null
-    private var contentExpandContainer : LinearLayout? = null
-
+class KotlinSampleActivity : AppCompatActivity() {
+    private var etInput: CustomEditTextMataUang? = null
+    private var btnProcess: Button? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        slideContent = findViewById(R.id.slide_conten)
-        containerFloatingMenu = findViewById(R.id.container_floating_menu)
-        contentExpandContainer = findViewById(R.id.content_expand_container)
-        initView()
+        etInput = findViewById<View>(R.id.etInput) as CustomEditTextMataUang
+        btnProcess = findViewById<View>(R.id.btnProcess) as Button
+        etInput!!.setCurrency(SimbolMataUang.USA)
+        etInput!!.setDelimiter(false)
+        etInput!!.setSpacing(false)
+        etInput!!.setDecimals(false)
+        etInput!!.setSeparator(",")
+        btnProcess!!.setOnClickListener {
+            if (etInput!!.length() != 0) {
+                val cleanDoubleOutput = etInput!!.cleanDoubleValue
+                val cleanIntOutput = etInput!!.cleanIntValue
+                Toast.makeText(this@KotlinSampleActivity, "Clean Double: $cleanDoubleOutput", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@KotlinSampleActivity, "Clean Integer: $cleanIntOutput", Toast.LENGTH_LONG).show()
+            }
+        }
     }
-
-
-    @SuppressLint("ResourceAsColor")
-    private fun initView() {
-        val floatingSlideUpSheet =   FloatingSlideUpBuilder(this, slideContent!!)
-                .setFloatingMenuRadiusInDp(32)
-                .setFloatingMenuColor(android.R.color.white)
-                .setFloatingMenu(containerFloatingMenu!!)
-                .setPanel(contentExpandContainer!!)
-                .build()
-
-
-    }
-
 }
 
 ```
@@ -63,38 +63,40 @@ class FloatingSlideUpSheetActivity : AppCompatActivity() {
 
 ```java
 
-public class FloatingSlideUpActivity extends AppCompatActivity {
+public class JavaSampleActivity extends AppCompatActivity {
 
-    private FloatingSlideUpLayout slideContent;
-    private LinearLayout containerFloatingMenu;
-    private LinearLayout contentExpandContainer;
+    CustomEditTextMataUang etInput;
+    Button btnProcess;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        slideContent = findViewById(R.id.slide_conten);
-        containerFloatingMenu = findViewById(R.id.container_floating_menu);
-        contentExpandContainer = findViewById(R.id.content_expand_container);
-        initView();
-    }
 
-    @SuppressLint("ResourceAsColor")
-    private void initView() {
-        FloatingSlideUpBuilder floatingSlideUpSheet = new FloatingSlideUpBuilder(this, slideContent);
-        floatingSlideUpSheet.setFloatingMenuRadiusInDp(32);
-        floatingSlideUpSheet.setFloatingMenuColor(android.R.color.white);
-        floatingSlideUpSheet.setFloatingMenu(containerFloatingMenu);
-        floatingSlideUpSheet.setPanel(contentExpandContainer);
-        floatingSlideUpSheet.build();
+        etInput = findViewById(R.id.etInput);
+        btnProcess = findViewById(R.id.btnProcess);
+
+        etInput.setCurrency(SimbolMataUang.INDONESIA);
+        etInput.setDelimiter(false);
+        etInput.setSpacing(false);
+        etInput.setDecimals(true);
+        etInput.setSeparator(".");
+
+        btnProcess.setOnClickListener(view -> {
+            if(etInput.length() != 0) {
+                double cleanDoubleOutput = etInput.getCleanDoubleValue();
+                int cleanIntOutput = etInput.getCleanIntValue();
+
+                Toast.makeText(JavaSampleActivity.this, "Clean Double: " + cleanDoubleOutput, Toast.LENGTH_LONG).show();
+                Toast.makeText(JavaSampleActivity.this, "Clean Integer: " + cleanIntOutput, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }
 
 ```
 
 ## License
-This project is sourced and wholly thought of https://github.com/rizmaulana/floating-slideup-sheet/blob/master/README.MD
-I am IndoSW is a project modifier to support JAVA and Sketchware users
 
 MIT License
 
